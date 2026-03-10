@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Joner Football Technique Test</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #111; color: #fff; font-family: Arial, sans-serif; min-height: 100vh; }
+
+  #app { max-width: 600px; margin: 0 auto; padding: 0 20px; }
+
+  /* Remove ALL WordPress theme spacing */
+  html, body { margin: 0 !important; padding: 0 !important; }
+  .entry-header, .page-header, .site-header, .entry-title,
+  h1.entry-title, .page-title, header.entry-header,
+  .wp-block-post-title { display: none !important; }
+  .entry-content, .page-content, .site-content,
+  .content-area, #content, #primary, main, article,
+  .entry { padding: 0 !important; margin: 0 !important; }
+
+  /* Hero */
+  .hero { width: 100%; height: 320px; object-fit: cover; object-position: center; display: block; }
+
+  /* Header */
+  .header { text-align: center; padding: 32px 20px 16px; }
+  .header h1 { font-size: 42px; font-weight: 900; text-transform: uppercase; margin-top: 12px; letter-spacing: 2px; line-height: 1.1; }
+  .header p { color: #aaa; font-size: 18px; margin-top: 10px; }
+
+  /* Progress */
+  .progress-wrap { margin: 16px 0; }
+  .progress-bar { background: #333; border-radius: 4px; height: 6px; overflow: hidden; }
+  .progress-fill { background: #FF0000; height: 6px; border-radius: 4px; transition: width 0.4s ease; }
+  .progress-text { font-size: 13px; color: #aaa; text-align: right; margin-top: 6px; }
+
+  /* Question card */
+  .card { background: #1a1a1a; border-radius: 12px; padding: 24px; margin: 16px 0; }
+  .category-tag { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #FF0000; font-weight: 700; margin-bottom: 8px; }
+  .question-text { font-size: 17px; font-weight: 700; line-height: 1.5; margin-bottom: 20px; }
+
+  /* Options */
+  .options { display: flex; flex-direction: column; gap: 12px; }
+  .option { background: #2a2a2a; border: 2px solid #333; border-radius: 10px; padding: 16px; cursor: pointer; transition: all 0.2s; font-size: 15px; line-height: 1.4; text-align: left; color: #fff; }
+  .option:hover { border-color: #555; background: #333; }
+  .option.selected-correct { border-color: #00cc44; background: #002a0f; }
+  .option.selected-wrong { border-color: #FF0000; background: #2a0000; }
+  .option.reveal-correct { border-color: #00cc44; background: #002a0f; }
+  .option.disabled { pointer-events: none; }
+  .option-letter { font-weight: 900; color: #FF0000; margin-right: 8px; }
+
+  /* Feedback */
+  .feedback { margin-top: 16px; padding: 12px 16px; border-radius: 8px; font-size: 14px; font-weight: 700; display: none; }
+  .feedback.correct { background: #002a0f; color: #00cc44; border: 1px solid #00cc44; }
+  .feedback.wrong { background: #2a0000; color: #ff6666; border: 1px solid #FF0000; }
+
+  /* Next button */
+  .btn-next { display: block; width: 100%; background: #FF0000; color: #fff; border: none; border-radius: 10px; padding: 18px; font-size: 17px; font-weight: 900; cursor: pointer; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; display: none; }
+  .btn-next:hover { background: #cc0000; }
+
+  /* Email capture screen */
+  #email-screen { display: none; text-align: center; padding: 40px 20px; }
+  #email-screen h2 { font-size: 28px; font-weight: 900; text-transform: uppercase; }
+  #email-screen p { color: #aaa; margin: 12px 0 28px; font-size: 15px; line-height: 1.6; }
+  #email-screen input { width: 100%; background: #1a1a1a; border: 2px solid #333; border-radius: 10px; padding: 16px; font-size: 16px; color: #fff; margin-bottom: 16px; outline: none; }
+  #email-screen input:focus { border-color: #FF0000; }
+  #email-screen button { width: 100%; background: #FF0000; color: #fff; border: none; border-radius: 10px; padding: 18px; font-size: 17px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+  #email-screen button:hover { background: #cc0000; }
+  .email-note { font-size: 12px; color: #666; margin-top: 12px; }
+
+  /* Results screen */
+  #results-screen { display: none; text-align: center; padding: 32px 0; }
+  .score-circle { width: 140px; height: 140px; border-radius: 50%; border: 6px solid #FF0000; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; flex-direction: column; }
+  .score-number { font-size: 48px; font-weight: 900; color: #FF0000; line-height: 1; }
+  .score-label { font-size: 13px; color: #aaa; }
+  .tier-badge { display: inline-block; background: #FF0000; color: #fff; padding: 8px 24px; border-radius: 30px; font-size: 15px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin: 12px 0 24px; }
+  .result-message { font-size: 16px; line-height: 1.7; color: #ccc; margin-bottom: 28px; padding: 0 8px; }
+  .btn-cta { display: block; width: 100%; background: #FF0000; color: #fff; border: none; border-radius: 10px; padding: 18px; font-size: 17px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; margin-bottom: 12px; }
+  .btn-cta:hover { background: #cc0000; }
+  .result-breakdown { background: #1a1a1a; border-radius: 12px; padding: 20px; margin-top: 24px; text-align: left; }
+  .result-breakdown h3 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #aaa; margin-bottom: 16px; }
+  .breakdown-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #222; font-size: 14px; }
+  .breakdown-item:last-child { border-bottom: none; }
+  .breakdown-correct { color: #00cc44; font-weight: 700; }
+  .breakdown-wrong { color: #ff6666; font-weight: 700; }
+
+  /* Start screen */
+  #start-screen { text-align: center; padding: 32px 0; }
+  #start-screen h2 { font-size: 26px; font-weight: 900; text-transform: uppercase; margin-bottom: 16px; }
+  #start-screen p { color: #aaa; font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
+  .test-info { background: #1a1a1a; border-radius: 12px; padding: 20px; margin-bottom: 28px; text-align: left; }
+  .test-info-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; font-size: 17px; border-bottom: 1px solid #222; }
+  .test-info-item:last-child { border-bottom: none; }
+  .test-info-item span:first-child { font-size: 20px; }
+  .btn-start { display: block; width: 100%; background: #FF0000; color: #fff; border: none; border-radius: 10px; padding: 20px; font-size: 18px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; }
+  .btn-start:hover { background: #cc0000; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- Header -->
+  <div style="text-align:center;padding:28px 0 16px;">
+    <div style="font-size:14px;font-weight:900;letter-spacing:4px;color:#FF0000;text-transform:uppercase;">Joner Football</div>
+    <h1 style="font-size:64px;font-weight:900;text-transform:uppercase;color:#fff;letter-spacing:2px;line-height:1;margin:10px 0 0;">Technique Test</h1>
+    <p style="color:#aaa;font-size:18px;margin-top:12px;">Find out your level in under 5 minutes</p>
+  </div>
+
+  <!-- Hero Image -->
+  <img src="https://res.cloudinary.com/dmzisjwdf/image/upload/v1773059956/technique-test-hero-v2.jpg" alt="Joner Football" class="hero" style="border-radius:12px;margin-bottom:8px;">
+
+  <!-- Start Screen -->
+  <div id="start-screen">
+    <div class="test-info">
+      <div class="test-info-item"><span style="color:#FF0000;font-weight:900;">1.</span><span>20 questions across 10 technique categories</span></div>
+      <div class="test-info-item"><span style="color:#FF0000;font-weight:900;">2.</span><span>Pick the correct technique from 3 options</span></div>
+      <div class="test-info-item"><span style="color:#FF0000;font-weight:900;">3.</span><span>Get your score out of 100</span></div>
+      <div class="test-info-item"><span style="color:#FF0000;font-weight:900;">4.</span><span>Takes less than 5 minutes</span></div>
+      <div class="test-info-item"><span style="color:#FF0000;font-weight:900;">5.</span><span>Find out if you're a Beginner, Intermediate, Semi Pro or Pro</span></div>
+      <div class="test-info-item" style="border-bottom:none;background:#1f1f1f;border-radius:8px;padding:14px;margin-top:4px;"><span style="color:#FF0000;font-weight:900;font-size:20px;">*</span><span><strong style="color:#fff;">Score 91 or above?</strong> You unlock a special reward from Lee</span></div>
+    </div>
+    <button class="btn-start" onclick="startTest()">Start the test</button>
+  </div>
+
+  <!-- Question Screen -->
+  <div id="question-screen" style="display:none;">
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      <div class="progress-text" id="progress-text">Question 1 of 20</div>
+    </div>
+    <div class="card">
+      <div class="category-tag" id="q-category"></div>
+      <div class="question-text" id="q-text"></div>
+      <div class="options" id="q-options"></div>
+      <div class="feedback" id="q-feedback"></div>
+    </div>
+    <button class="btn-next" id="btn-next" onclick="nextQuestion()">Next question</button>
+  </div>
+
+  <!-- Email Screen -->
+  <div id="email-screen">
+    
+    <h2>Test complete!</h2>
+    <p>Enter your email below to see your score and find out your technique level.</p>
+    <input type="email" id="email-input" placeholder="Enter your email address">
+    <button onclick="submitEmail()">See my score</button>
+    <p class="email-note">We will send you your results and some free coaching resources. No spam.</p>
+  </div>
+
+  <!-- Results Screen -->
+  <div id="results-screen">
+    <div class="score-circle">
+      <div class="score-number" id="result-score">0</div>
+      <div class="score-label">out of 100</div>
+    </div>
+    <div class="tier-badge" id="result-tier">Beginner</div>
+    <p class="result-message" id="result-message"></p>
+    <a class="btn-cta" href="https://app.jonerfootball.com/join_us" target="_blank">Work on your technique in the APP</a>
+    <div class="result-breakdown">
+      <h3>Your breakdown</h3>
+      <div id="breakdown-list"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const BREVO_KEY = ""; // Removed for public hosting
+
+const questions = [
+  { category: "Side Foot Pass", q: "Which image shows the correct foot position for a side foot pass?", options: ["Player striking with toes pointed down, using the front of the foot", "Player striking with inside of foot, ankle locked, toes slightly raised", "Player striking with the outside of the foot, body leaning away"], correct: 1 },
+  { category: "Side Foot Pass", q: "Which technique shows the correct body position when completing a side foot pass?", options: ["Standing leg planted beside the ball, hips open to target, head over the ball", "Standing leg behind the ball, body leaning backward", "Standing leg far from the ball, shoulders closed off from target"], correct: 0 },
+  { category: "Curled Shot", q: "Which image shows the correct contact point on the ball for a curled shot?", options: ["Striking dead centre of the ball", "Striking the outside edge of the ball with inside of foot", "Striking underneath the ball with toes"], correct: 1 },
+  { category: "Curled Shot", q: "Which follow-through technique will produce the best curl on your shot?", options: ["Foot wrapping around the ball, following across the body", "Foot stopping dead on contact", "Foot following straight through toward the target"], correct: 0 },
+  { category: "Long Ball", q: "Which body position is correct for striking a long ball?", options: ["Body upright, leaning slightly back, striking underneath the ball", "Body hunched forward, striking the top of the ball", "Body sideways, striking across the ball"], correct: 0 },
+  { category: "Long Ball", q: "Which approach angle and plant foot position produces the best long ball?", options: ["Straight approach, plant foot level with ball", "Slight angle approach, plant foot beside and slightly behind ball", "Wide angle approach, plant foot far from ball"], correct: 1 },
+  { category: "Dribbling", q: "Which image shows the correct body position when dribbling at speed?", options: ["Ball close to feet, knees bent, head up scanning the pitch", "Ball far ahead, body upright, eyes fixed on the ball", "Ball behind the player, sprinting to catch up"], correct: 0 },
+  { category: "Dribbling", q: "Which touch technique keeps the ball under control while dribbling in tight spaces?", options: ["Using only the sole of the foot, tapping down on the ball", "Small touches with inside and outside of foot, ball never more than a stride away", "Big pushes with laces, covering maximum ground per touch"], correct: 1 },
+  { category: "Heading", q: "Which contact point on the head should you use when heading the ball?", options: ["Top of the head", "Forehead, hairline area", "Side of the head near the temple"], correct: 1 },
+  { category: "Heading", q: "Which body mechanics produce the most power and accuracy in a header?", options: ["Eyes closed, neck stiff, waiting for ball to hit head", "Eyes open, neck muscles engaged, attacking the ball with forehead", "Eyes open, neck relaxed, letting head snap backward on contact"], correct: 1 },
+  { category: "Defending 1v1s", q: "Which stance is correct when defending in a 1v1 situation?", options: ["Side-on stance, knees bent, weight on balls of feet, jockeying", "Square stance, legs straight, flat-footed", "Turned completely, sprinting alongside attacker"], correct: 0 },
+  { category: "Defending 1v1s", q: "When should a defender commit to a tackle in a 1v1?", options: ["Immediately when the attacker receives the ball", "When the attacker takes a heavy touch or loses close control", "Never — always stay back and contain"], correct: 1 },
+  { category: "Instep Control", q: "Which foot position is correct for controlling a driven pass with your instep?", options: ["Toes pointed up, presenting the laces/instep, cushioning backward", "Toes pointed down, stabbing at the ball", "Foot flat on ground, letting ball roll over it"], correct: 0 },
+  { category: "Instep Control", q: "What should your body do at the moment of contact when instep controlling?", options: ["Stay rigid to stop the ball dead", "Relax and withdraw the foot slightly, cushioning the ball", "Kick through the ball to redirect it forward"], correct: 1 },
+  { category: "Control from Air", q: "Which technique is correct for controlling a high ball out of the air with your foot?", options: ["Raising foot high, cushioning ball down softly with laces or instep", "Letting ball bounce first, then collecting it", "Kicking the ball back up into the air"], correct: 0 },
+  { category: "Control from Air", q: "What should your supporting leg and arms do when controlling a ball out of the air?", options: ["Both arms tight to body, standing leg locked straight", "Arms out for balance, standing leg slightly bent for stability", "Arms behind back, hopping on standing leg"], correct: 1 },
+  { category: "Chest Control", q: "Which chest position is correct for controlling a ball?", options: ["Puffing chest out, presenting broad surface, cushioning backward", "Turning sideways, letting ball hit shoulder", "Hunching forward, letting ball hit stomach"], correct: 0 },
+  { category: "Chest Control", q: "What happens with your body at the moment the ball contacts your chest?", options: ["Lean into the ball aggressively", "Arch back slightly, withdrawing chest to absorb impact", "Stay completely stiff and let ball bounce off"], correct: 1 },
+  { category: "Shot Power", q: "Which part of the foot generates the most power on a shot?", options: ["Laces/instep, striking through the centre of the ball", "Inside of foot, side foot finish", "Toes, poking at the ball"], correct: 0 },
+  { category: "Shot Power", q: "Which combination of technique produces maximum shot power?", options: ["Short backswing, slow approach, contact with toe", "Full backswing, fast approach, locked ankle, strike through middle of ball with laces", "No backswing, standing still, letting the ball do the work"], correct: 1 }
+];
+
+let current = 0;
+let score = 0;
+let answered = false;
+let categoryResults = {};
+
+function startTest() {
+  document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('question-screen').style.display = 'block';
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = questions[current];
+  answered = false;
+
+  document.getElementById('q-category').textContent = q.category;
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('progress-text').textContent = `Question ${current + 1} of ${questions.length}`;
+  document.getElementById('progress-fill').style.width = `${(current / questions.length) * 100}%`;
+
+  const feedback = document.getElementById('q-feedback');
+  feedback.style.display = 'none';
+  feedback.className = 'feedback';
+
+  document.getElementById('btn-next').style.display = 'none';
+
+  const optionsEl = document.getElementById('q-options');
+  optionsEl.innerHTML = '';
+  const letters = ['A', 'B', 'C'];
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.innerHTML = `<span class="option-letter">${letters[i]}</span>${opt}`;
+    btn.onclick = () => selectAnswer(i);
+    optionsEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(selected) {
+  if (answered) return;
+  answered = true;
+
+  const q = questions[current];
+  const options = document.querySelectorAll('.option');
+  const feedback = document.getElementById('q-feedback');
+
+  options.forEach(o => o.classList.add('disabled'));
+
+  if (!categoryResults[q.category]) categoryResults[q.category] = { correct: 0, total: 0 };
+  categoryResults[q.category].total++;
+
+  if (selected === q.correct) {
+    score += 5;
+    options[selected].classList.add('selected-correct');
+    feedback.className = 'feedback correct';
+    feedback.textContent = '✓ Correct! Well done.';
+    categoryResults[q.category].correct++;
+  } else {
+    options[selected].classList.add('selected-wrong');
+    options[q.correct].classList.add('reveal-correct');
+    feedback.className = 'feedback wrong';
+    feedback.textContent = `✗ Not quite. The correct answer was ${['A','B','C'][q.correct]}.`;
+  }
+
+  feedback.style.display = 'block';
+
+  const nextBtn = document.getElementById('btn-next');
+  nextBtn.style.display = 'block';
+  nextBtn.textContent = current < questions.length - 1 ? 'Next question' : 'See my score';
+}
+
+function nextQuestion() {
+  current++;
+  if (current < questions.length) {
+    showQuestion();
+  } else {
+    showEmailScreen();
+  }
+}
+
+function showEmailScreen() {
+  document.getElementById('question-screen').style.display = 'none';
+  document.getElementById('email-screen').style.display = 'block';
+}
+
+function getTier(s) {
+  if (s >= 91) return { tier: 'Pro', message: 'Elite level. Your technique is seriously impressive. Check your email — we have sent you something special as a reward.' };
+  if (s >= 80) return { tier: 'Semi Pro', message: 'You are nearly there. Your foundations are strong but the finer details will take you to the next level. The app has everything you need to close that gap.' };
+  if (s >= 50) return { tier: 'Intermediate', message: 'You know the basics but there is real room to improve. The Joner Football app has over 1,000 drills and full programmes to sharpen every area of your game.' };
+  return { tier: 'Beginner', message: 'Your technique needs work and that is completely fine. Every elite player started somewhere. The Joner Football app will take you through the fundamentals step by step.' };
+}
+
+async function submitEmail() {
+  const email = document.getElementById('email-input').value.trim();
+  if (!email || !email.includes('@')) {
+    alert('Please enter a valid email address.');
+    return;
+  }
+
+  // Send to Brevo
+  const tier = getTier(score).tier;
+  try {
+    await fetch('https://api.brevo.com/v3/contacts', {
+      method: 'POST',
+      headers: { 'api-key': BREVO_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        listIds: [2],
+        updateEnabled: true,
+        attributes: { TECHNIQUE_SCORE: score, TECHNIQUE_TIER: tier }
+      })
+    });
+  } catch(e) { /* silent fail */ }
+
+  // If Pro scorer (91-100) — send reward email via Brevo transactional
+  if (score >= 91) {
+    try {
+      await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: { 'api-key': BREVO_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sender: { name: 'Joner Football', email: 'leejones@jonerfootball.com' },
+          to: [{ email: email }],
+          subject: 'Your reward',
+          htmlContent: `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f4f4f4;font-family:Arial,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:20px 0;"><tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="background:#111111;max-width:600px;width:100%;"><tr><td><img src="https://i.ibb.co/hxSXn81D/joner-hero-email3.jpg" width="600" style="display:block;width:100%;max-width:600px;" alt="Joner Football"></td></tr><tr><td style="padding:40px 32px;color:#ffffff;"><p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#ffffff;">You scored ${score}/100 on the Joner Football Technique Test.</p><p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#ffffff;">That puts you in the top tier. Pro level. Seriously impressive.</p><p style="margin:0 0 24px;font-size:16px;line-height:1.6;color:#ffffff;">As a reward I want to give you 20% off the Joner Football app. The most advanced players deserve the most advanced training.</p><table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:8px 0 32px;"><a href="https://app.jonerfootball.com/checkout/new?o=183092&d=https://app.jonerfootball.com/checkout/new?o=202578&d=REMONTADA20" style="background:#FF0000;color:#ffffff;text-decoration:none;padding:16px 40px;font-size:16px;font-weight:bold;display:inline-block;border-radius:4px;">Claim your 20% off</a></td></tr></table><p style="margin:0 0 4px;font-size:16px;color:#ffffff;">Talk soon,</p><p style="margin:0;font-size:16px;color:#ffffff;">Lee</p></td></tr><tr><td style="padding:20px 32px;border-top:1px solid #333333;"><p style="margin:0;font-size:12px;color:#888888;text-align:center;">Joner Football | Sydney, Australia</p></td></tr></table></td></tr></table></body></html>`
+        })
+      });
+    } catch(e) { /* silent fail */ }
+  }
+
+  showResults();
+}
+
+function showResults() {
+  document.getElementById('email-screen').style.display = 'none';
+  document.getElementById('results-screen').style.display = 'block';
+
+  const { tier, message } = getTier(score);
+  document.getElementById('result-score').textContent = score;
+  document.getElementById('result-tier').textContent = tier;
+  document.getElementById('result-message').textContent = message;
+
+  // Breakdown
+  const breakdownEl = document.getElementById('breakdown-list');
+  breakdownEl.innerHTML = '';
+  Object.entries(categoryResults).forEach(([cat, res]) => {
+    const item = document.createElement('div');
+    item.className = 'breakdown-item';
+    item.innerHTML = `<span>${cat}</span><span class="${res.correct === res.total ? 'breakdown-correct' : res.correct === 0 ? 'breakdown-wrong' : ''}">${res.correct}/${res.total}</span>`;
+    breakdownEl.appendChild(item);
+  });
+}
+</script>
+</body>
+</html>
