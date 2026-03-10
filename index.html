@@ -7,38 +7,21 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #111; color: #fff; font-family: Arial, sans-serif; min-height: 100vh; }
-
   #app { max-width: 600px; margin: 0 auto; padding: 0 20px; }
-
-  /* Remove ALL WordPress theme spacing */
   html, body { margin: 0 !important; padding: 0 !important; }
-  .entry-header, .page-header, .site-header, .entry-title,
-  h1.entry-title, .page-title, header.entry-header,
-  .wp-block-post-title { display: none !important; }
-  .entry-content, .page-content, .site-content,
-  .content-area, #content, #primary, main, article,
-  .entry { padding: 0 !important; margin: 0 !important; }
-
-  /* Hero */
+  .entry-header, .page-header, .site-header, .entry-title, h1.entry-title, .page-title, header.entry-header, .wp-block-post-title { display: none !important; }
+  .entry-content, .page-content, .site-content, .content-area, #content, #primary, main, article, .entry { padding: 0 !important; margin: 0 !important; }
   .hero { width: 100%; height: 320px; object-fit: cover; object-position: center; display: block; }
-
-  /* Header */
   .header { text-align: center; padding: 32px 20px 16px; }
   .header h1 { font-size: 42px; font-weight: 900; text-transform: uppercase; margin-top: 12px; letter-spacing: 2px; line-height: 1.1; }
   .header p { color: #aaa; font-size: 18px; margin-top: 10px; }
-
-  /* Progress */
   .progress-wrap { margin: 16px 0; }
   .progress-bar { background: #333; border-radius: 4px; height: 6px; overflow: hidden; }
   .progress-fill { background: #FF0000; height: 6px; border-radius: 4px; transition: width 0.4s ease; }
   .progress-text { font-size: 13px; color: #aaa; text-align: right; margin-top: 6px; }
-
-  /* Question card */
   .card { background: #1a1a1a; border-radius: 12px; padding: 24px; margin: 16px 0; }
   .category-tag { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #FF0000; font-weight: 700; margin-bottom: 8px; }
   .question-text { font-size: 17px; font-weight: 700; line-height: 1.5; margin-bottom: 20px; }
-
-  /* Options */
   .options { display: flex; flex-direction: column; gap: 12px; }
   .option { background: #2a2a2a; border: 2px solid #333; border-radius: 10px; padding: 16px; cursor: pointer; transition: all 0.2s; font-size: 15px; line-height: 1.4; text-align: left; color: #fff; }
   .option:hover { border-color: #555; background: #333; }
@@ -47,17 +30,23 @@
   .option.reveal-correct { border-color: #00cc44; background: #002a0f; }
   .option.disabled { pointer-events: none; }
   .option-letter { font-weight: 900; color: #FF0000; margin-right: 8px; }
-
-  /* Feedback */
+  
+  /* Image options */
+  .options-images { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .option-img { background: #2a2a2a; border: 3px solid #333; border-radius: 10px; cursor: pointer; transition: all 0.2s; overflow: hidden; position: relative; }
+  .option-img:hover { border-color: #555; transform: scale(1.02); }
+  .option-img.selected-correct { border-color: #00cc44; }
+  .option-img.selected-wrong { border-color: #FF0000; }
+  .option-img.reveal-correct { border-color: #00cc44; }
+  .option-img.disabled { pointer-events: none; }
+  .option-img img { width: 100%; height: 160px; object-fit: cover; display: block; }
+  .option-img .img-letter { position: absolute; top: 8px; left: 8px; background: #FF0000; color: #fff; font-weight: 900; font-size: 14px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+  
   .feedback { margin-top: 16px; padding: 12px 16px; border-radius: 8px; font-size: 14px; font-weight: 700; display: none; }
   .feedback.correct { background: #002a0f; color: #00cc44; border: 1px solid #00cc44; }
   .feedback.wrong { background: #2a0000; color: #ff6666; border: 1px solid #FF0000; }
-
-  /* Next button */
   .btn-next { display: block; width: 100%; background: #FF0000; color: #fff; border: none; border-radius: 10px; padding: 18px; font-size: 17px; font-weight: 900; cursor: pointer; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; display: none; }
   .btn-next:hover { background: #cc0000; }
-
-  /* Email capture screen */
   #email-screen { display: none; text-align: center; padding: 40px 20px; }
   #email-screen h2 { font-size: 28px; font-weight: 900; text-transform: uppercase; }
   #email-screen p { color: #aaa; margin: 12px 0 28px; font-size: 15px; line-height: 1.6; }
@@ -66,8 +55,6 @@
   #email-screen button { width: 100%; background: #FF0000; color: #fff; border: none; border-radius: 10px; padding: 18px; font-size: 17px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
   #email-screen button:hover { background: #cc0000; }
   .email-note { font-size: 12px; color: #666; margin-top: 12px; }
-
-  /* Results screen */
   #results-screen { display: none; text-align: center; padding: 32px 0; }
   .score-circle { width: 140px; height: 140px; border-radius: 50%; border: 6px solid #FF0000; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; flex-direction: column; }
   .score-number { font-size: 48px; font-weight: 900; color: #FF0000; line-height: 1; }
@@ -82,8 +69,6 @@
   .breakdown-item:last-child { border-bottom: none; }
   .breakdown-correct { color: #00cc44; font-weight: 700; }
   .breakdown-wrong { color: #ff6666; font-weight: 700; }
-
-  /* Start screen */
   #start-screen { text-align: center; padding: 32px 0; }
   #start-screen h2 { font-size: 26px; font-weight: 900; text-transform: uppercase; margin-bottom: 16px; }
   #start-screen p { color: #aaa; font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
@@ -98,77 +83,69 @@
 <body>
 <div id="app">
 
-  <!-- Header -->
-  <div style="text-align:center;padding:28px 0 16px;">
-    <div style="font-size:14px;font-weight:900;letter-spacing:4px;color:#FF0000;text-transform:uppercase;">Joner Football</div>
-    <h1 style="font-size:64px;font-weight:900;text-transform:uppercase;color:#fff;letter-spacing:2px;line-height:1;margin:10px 0 0;">Technique Test</h1>
-    <p style="color:#aaa;font-size:18px;margin-top:12px;">Find out your level in under 5 minutes</p>
-  </div>
-
-  <!-- Hero Image -->
-  <img src="https://res.cloudinary.com/dmzisjwdf/image/upload/v1773059956/technique-test-hero-v2.jpg" alt="Joner Football" class="hero" style="border-radius:12px;margin-bottom:8px;">
-
-  <!-- Start Screen -->
   <div id="start-screen">
-    <div class="test-info">
-      <div class="test-info-item"><span style="color:#FF0000;font-weight:900;">1.</span><span>20 questions across 10 technique categories</span></div>
-      <div class="test-info-item"><span style="color:#FF0000;font-weight:900;">2.</span><span>Pick the correct technique from 3 options</span></div>
-      <div class="test-info-item"><span style="color:#FF0000;font-weight:900;">3.</span><span>Get your score out of 100</span></div>
-      <div class="test-info-item"><span style="color:#FF0000;font-weight:900;">4.</span><span>Takes less than 5 minutes</span></div>
-      <div class="test-info-item"><span style="color:#FF0000;font-weight:900;">5.</span><span>Find out if you're a Beginner, Intermediate, Semi Pro or Pro</span></div>
-      <div class="test-info-item" style="border-bottom:none;background:#1f1f1f;border-radius:8px;padding:14px;margin-top:4px;"><span style="color:#FF0000;font-weight:900;font-size:20px;">*</span><span><strong style="color:#fff;">Score 91 or above?</strong> You unlock a special reward from Lee</span></div>
+    <div class="header">
+      <h1>Joner Football<br>Technique Test</h1>
+      <p>Find out your level in under 5 minutes</p>
     </div>
-    <button class="btn-start" onclick="startTest()">Start the test</button>
+    <div class="test-info">
+      <div class="test-info-item"><span>1</span><span>20 questions across 10 technique categories</span></div>
+      <div class="test-info-item"><span>2</span><span>Pick the correct technique from 3 options</span></div>
+      <div class="test-info-item"><span>3</span><span>Get your score out of 100</span></div>
+      <div class="test-info-item"><span>4</span><span>Takes less than 5 minutes</span></div>
+      <div class="test-info-item"><span>5</span><span>Find out if you're a Beginner, Intermediate, Semi Pro or Pro</span></div>
+    </div>
+    <p style="font-size: 13px; color: #888; margin-bottom: 20px;">*Score 91 or above? You unlock a special reward from Lee</p>
+    <button class="btn-start" onclick="startTest()">Start The Test</button>
   </div>
 
-  <!-- Question Screen -->
   <div id="question-screen" style="display:none;">
     <div class="progress-wrap">
-      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
       <div class="progress-text" id="progress-text">Question 1 of 20</div>
     </div>
     <div class="card">
-      <div class="category-tag" id="q-category"></div>
-      <div class="question-text" id="q-text"></div>
-      <div class="options" id="q-options"></div>
+      <div class="category-tag" id="q-category">Side Foot Pass</div>
+      <div class="question-text" id="q-text">Question text here</div>
+      <div id="q-options"></div>
       <div class="feedback" id="q-feedback"></div>
+      <button class="btn-next" id="btn-next" onclick="nextQuestion()">Next Question</button>
     </div>
-    <button class="btn-next" id="btn-next" onclick="nextQuestion()">Next question</button>
   </div>
 
-  <!-- Email Screen -->
   <div id="email-screen">
-    
     <h2>Test complete!</h2>
     <p>Enter your email below to see your score and find out your technique level.</p>
-    <input type="email" id="email-input" placeholder="Enter your email address">
-    <button onclick="submitEmail()">See my score</button>
+    <input type="email" id="email-input" placeholder="Your email address">
+    <button onclick="submitEmail()">See My Results</button>
     <p class="email-note">We will send you your results and some free coaching resources. No spam.</p>
   </div>
 
-  <!-- Results Screen -->
   <div id="results-screen">
-    <div class="score-circle">
-      <div class="score-number" id="result-score">0</div>
-      <div class="score-label">out of 100</div>
-    </div>
-    <div class="tier-badge" id="result-tier">Beginner</div>
-    <p class="result-message" id="result-message"></p>
-    <a class="btn-cta" href="https://app.jonerfootball.com/join_us" target="_blank">Work on your technique in the APP</a>
-    <div class="result-breakdown">
-      <h3>Your breakdown</h3>
-      <div id="breakdown-list"></div>
-    </div>
+    <div class="score-circle"><div class="score-number" id="final-score">0</div><div class="score-label">out of 100</div></div>
+    <div class="tier-badge" id="tier-badge">Beginner</div>
+    <p class="result-message" id="result-message">Your result message here</p>
+    <a href="https://app.jonerfootball.com/join_us" class="btn-cta">Start Your Free Trial</a>
+    <div class="result-breakdown"><h3>Category Breakdown</h3><div id="breakdown-list"></div></div>
   </div>
 
 </div>
 
 <script>
-const BREVO_KEY = ""; // Removed for public hosting
-
+// Questions with image support
 const questions = [
-  { category: "Side Foot Pass", q: "Which image shows the correct foot position for a side foot pass?", options: ["Player striking with toes pointed down, using the front of the foot", "Player striking with inside of foot, ankle locked, toes slightly raised", "Player striking with the outside of the foot, body leaning away"], correct: 1 },
-  { category: "Side Foot Pass", q: "Which technique shows the correct body position when completing a side foot pass?", options: ["Standing leg planted beside the ball, hips open to target, head over the ball", "Standing leg behind the ball, body leaning backward", "Standing leg far from the ball, shoulders closed off from target"], correct: 0 },
+  { 
+    category: "Side Foot Pass", 
+    q: "Which image shows the correct foot position for a side foot pass?", 
+    images: ["images/q1-a.jpg", "images/q1-b.jpg", "images/q1-c.jpg"],
+    correct: 1 // Will update when Lee confirms
+  },
+  { 
+    category: "Side Foot Pass", 
+    q: "Which technique shows the correct body position when completing a side foot pass?", 
+    images: ["images/q2-a.jpg", "images/q2-b.jpg", "images/q2-c.jpg"],
+    correct: 0 // Will update when Lee confirms
+  },
   { category: "Curled Shot", q: "Which image shows the correct contact point on the ball for a curled shot?", options: ["Striking dead centre of the ball", "Striking the outside edge of the ball with inside of foot", "Striking underneath the ball with toes"], correct: 1 },
   { category: "Curled Shot", q: "Which follow-through technique will produce the best curl on your shot?", options: ["Foot wrapping around the ball, following across the body", "Foot stopping dead on contact", "Foot following straight through toward the target"], correct: 0 },
   { category: "Long Ball", q: "Which body position is correct for striking a long ball?", options: ["Body upright, leaning slightly back, striking underneath the ball", "Body hunched forward, striking the top of the ball", "Body sideways, striking across the ball"], correct: 0 },
@@ -212,19 +189,32 @@ function showQuestion() {
   const feedback = document.getElementById('q-feedback');
   feedback.style.display = 'none';
   feedback.className = 'feedback';
-
   document.getElementById('btn-next').style.display = 'none';
 
   const optionsEl = document.getElementById('q-options');
   optionsEl.innerHTML = '';
   const letters = ['A', 'B', 'C'];
-  q.options.forEach((opt, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'option';
-    btn.innerHTML = `<span class="option-letter">${letters[i]}</span>${opt}`;
-    btn.onclick = () => selectAnswer(i);
-    optionsEl.appendChild(btn);
-  });
+  
+  // Check if this question has images
+  if (q.images) {
+    optionsEl.className = 'options-images';
+    q.images.forEach((img, i) => {
+      const div = document.createElement('div');
+      div.className = 'option-img';
+      div.innerHTML = `<span class="img-letter">${letters[i]}</span><img src="${img}" alt="Option ${letters[i]}">`;
+      div.onclick = () => selectAnswer(i);
+      optionsEl.appendChild(div);
+    });
+  } else {
+    optionsEl.className = 'options';
+    q.options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'option';
+      btn.innerHTML = `<span class="option-letter">${letters[i]}</span>${opt}`;
+      btn.onclick = () => selectAnswer(i);
+      optionsEl.appendChild(btn);
+    });
+  }
 }
 
 function selectAnswer(selected) {
@@ -232,32 +222,31 @@ function selectAnswer(selected) {
   answered = true;
 
   const q = questions[current];
-  const options = document.querySelectorAll('.option');
+  const isImage = !!q.images;
+  const options = document.querySelectorAll(isImage ? '.option-img' : '.option');
   const feedback = document.getElementById('q-feedback');
 
   options.forEach(o => o.classList.add('disabled'));
 
-  if (!categoryResults[q.category]) categoryResults[q.category] = { correct: 0, total: 0 };
-  categoryResults[q.category].total++;
-
-  if (selected === q.correct) {
-    score += 5;
+  const isCorrect = selected === q.correct;
+  if (isCorrect) {
+    score++;
     options[selected].classList.add('selected-correct');
+    feedback.textContent = '✓ Correct!';
     feedback.className = 'feedback correct';
-    feedback.textContent = '✓ Correct! Well done.';
-    categoryResults[q.category].correct++;
   } else {
     options[selected].classList.add('selected-wrong');
     options[q.correct].classList.add('reveal-correct');
+    feedback.textContent = '✗ Incorrect';
     feedback.className = 'feedback wrong';
-    feedback.textContent = `✗ Not quite. The correct answer was ${['A','B','C'][q.correct]}.`;
   }
-
   feedback.style.display = 'block';
 
-  const nextBtn = document.getElementById('btn-next');
-  nextBtn.style.display = 'block';
-  nextBtn.textContent = current < questions.length - 1 ? 'Next question' : 'See my score';
+  if (!categoryResults[q.category]) categoryResults[q.category] = { correct: 0, total: 0 };
+  categoryResults[q.category].total++;
+  if (isCorrect) categoryResults[q.category].correct++;
+
+  document.getElementById('btn-next').style.display = 'block';
 }
 
 function nextQuestion() {
@@ -265,60 +254,21 @@ function nextQuestion() {
   if (current < questions.length) {
     showQuestion();
   } else {
-    showEmailScreen();
+    showEmailCapture();
   }
 }
 
-function showEmailScreen() {
+function showEmailCapture() {
   document.getElementById('question-screen').style.display = 'none';
   document.getElementById('email-screen').style.display = 'block';
 }
 
-function getTier(s) {
-  if (s >= 91) return { tier: 'Pro', message: 'Elite level. Your technique is seriously impressive. Check your email — we have sent you something special as a reward.' };
-  if (s >= 80) return { tier: 'Semi Pro', message: 'You are nearly there. Your foundations are strong but the finer details will take you to the next level. The app has everything you need to close that gap.' };
-  if (s >= 50) return { tier: 'Intermediate', message: 'You know the basics but there is real room to improve. The Joner Football app has over 1,000 drills and full programmes to sharpen every area of your game.' };
-  return { tier: 'Beginner', message: 'Your technique needs work and that is completely fine. Every elite player started somewhere. The Joner Football app will take you through the fundamentals step by step.' };
-}
-
-async function submitEmail() {
+function submitEmail() {
   const email = document.getElementById('email-input').value.trim();
   if (!email || !email.includes('@')) {
-    alert('Please enter a valid email address.');
+    alert('Please enter a valid email address');
     return;
   }
-
-  // Send to Brevo
-  const tier = getTier(score).tier;
-  try {
-    await fetch('https://api.brevo.com/v3/contacts', {
-      method: 'POST',
-      headers: { 'api-key': BREVO_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: email,
-        listIds: [2],
-        updateEnabled: true,
-        attributes: { TECHNIQUE_SCORE: score, TECHNIQUE_TIER: tier }
-      })
-    });
-  } catch(e) { /* silent fail */ }
-
-  // If Pro scorer (91-100) — send reward email via Brevo transactional
-  if (score >= 91) {
-    try {
-      await fetch('https://api.brevo.com/v3/smtp/email', {
-        method: 'POST',
-        headers: { 'api-key': BREVO_KEY, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sender: { name: 'Joner Football', email: 'leejones@jonerfootball.com' },
-          to: [{ email: email }],
-          subject: 'Your reward',
-          htmlContent: `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f4f4f4;font-family:Arial,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:20px 0;"><tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="background:#111111;max-width:600px;width:100%;"><tr><td><img src="https://i.ibb.co/hxSXn81D/joner-hero-email3.jpg" width="600" style="display:block;width:100%;max-width:600px;" alt="Joner Football"></td></tr><tr><td style="padding:40px 32px;color:#ffffff;"><p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#ffffff;">You scored ${score}/100 on the Joner Football Technique Test.</p><p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#ffffff;">That puts you in the top tier. Pro level. Seriously impressive.</p><p style="margin:0 0 24px;font-size:16px;line-height:1.6;color:#ffffff;">As a reward I want to give you 20% off the Joner Football app. The most advanced players deserve the most advanced training.</p><table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:8px 0 32px;"><a href="https://app.jonerfootball.com/checkout/new?o=183092&d=https://app.jonerfootball.com/checkout/new?o=202578&d=REMONTADA20" style="background:#FF0000;color:#ffffff;text-decoration:none;padding:16px 40px;font-size:16px;font-weight:bold;display:inline-block;border-radius:4px;">Claim your 20% off</a></td></tr></table><p style="margin:0 0 4px;font-size:16px;color:#ffffff;">Talk soon,</p><p style="margin:0;font-size:16px;color:#ffffff;">Lee</p></td></tr><tr><td style="padding:20px 32px;border-top:1px solid #333333;"><p style="margin:0;font-size:12px;color:#888888;text-align:center;">Joner Football | Sydney, Australia</p></td></tr></table></td></tr></table></body></html>`
-        })
-      });
-    } catch(e) { /* silent fail */ }
-  }
-
   showResults();
 }
 
@@ -326,20 +276,36 @@ function showResults() {
   document.getElementById('email-screen').style.display = 'none';
   document.getElementById('results-screen').style.display = 'block';
 
-  const { tier, message } = getTier(score);
-  document.getElementById('result-score').textContent = score;
-  document.getElementById('result-tier').textContent = tier;
+  const percentage = Math.round((score / questions.length) * 100);
+  document.getElementById('final-score').textContent = percentage;
+
+  let tier, message;
+  if (percentage >= 91) {
+    tier = 'PRO';
+    message = "Elite technique! You've mastered the fundamentals. Message Lee on Instagram for your reward.";
+  } else if (percentage >= 71) {
+    tier = 'SEMI PRO';
+    message = "Strong technique foundation. A few areas to sharpen and you'll be at the elite level.";
+  } else if (percentage >= 51) {
+    tier = 'INTERMEDIATE';
+    message = "You know the basics but there's room to improve. The Joner Football App can help you level up.";
+  } else {
+    tier = 'BEGINNER';
+    message = "You're at the start of your technique journey. Great news: everything can be trained. Let's get to work.";
+  }
+
+  document.getElementById('tier-badge').textContent = tier;
   document.getElementById('result-message').textContent = message;
 
-  // Breakdown
   const breakdownEl = document.getElementById('breakdown-list');
   breakdownEl.innerHTML = '';
-  Object.entries(categoryResults).forEach(([cat, res]) => {
-    const item = document.createElement('div');
-    item.className = 'breakdown-item';
-    item.innerHTML = `<span>${cat}</span><span class="${res.correct === res.total ? 'breakdown-correct' : res.correct === 0 ? 'breakdown-wrong' : ''}">${res.correct}/${res.total}</span>`;
-    breakdownEl.appendChild(item);
-  });
+  for (const [cat, result] of Object.entries(categoryResults)) {
+    const div = document.createElement('div');
+    div.className = 'breakdown-item';
+    const status = result.correct === result.total ? 'breakdown-correct' : 'breakdown-wrong';
+    div.innerHTML = `<span>${cat}</span><span class="${status}">${result.correct}/${result.total}</span>`;
+    breakdownEl.appendChild(div);
+  }
 }
 </script>
 </body>
